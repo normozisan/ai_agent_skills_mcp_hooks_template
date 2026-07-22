@@ -21,16 +21,31 @@
 開発プロジェクトのフォルダで:
 
 ```bash
-# 1. このパッケージをインストール(skills/agents/hooks/MCPが各ツールの規定場所に配備される)
-apm install normozisan/ai_agent_skills_mcp_hooks_template
+# 1. このパッケージをインストール(使うツールを --target で指定)
+apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude
+#   Copilot(VS Code)の場合: --target copilot
+#   ※ 新規の空フォルダでは --target 指定が必須(既存プロジェクトでは自動検出)
 
 # 2. 使っているツール向けにコンパイル(規約ファイルを生成)
-apm compile              # AGENTS.md を生成(Claude Code等のCLI系が読む)
+apm compile              # AGENTS.md を生成(CLI系ツールが読む)
 apm compile -t copilot   # .github/copilot-instructions.md を生成(VS Code / Copilot用)
 
 # 3. プロジェクト雛形をコピー(成果物フォルダ・権限設定など)
 #    このリポジトリの template/ の中身をプロジェクト直下にコピーする
 ```
+
+`--target claude` でインストールすると以下が自動配備されます(動作確認済み):
+
+- `.claude/skills/` に10 skills(品質基準・テンプレート同梱)
+- `.claude/agents/` に8 agents
+- `.claude/rules/` にパイプライン規約
+- `.claude/settings.json` に SessionStart フックをマージ
+- `apm.yml` / `apm.lock.yaml` に依存が記録され、以後は `apm install` だけで再現可能
+
+### Windowsでの注意
+
+- **`Filename too long` エラーが出た場合**: `git config --global core.longpaths true` を実行してから再試行してください(深い階層のフォルダで発生します)
+- **MCPサーバーの登録が進まない場合**: Node.js がインストールされているか確認してください(MCPサーバーは npx 経由で起動されるため必須)。MCP登録に失敗しても skills/agents/hooks は配備済みなので、`template/.mcp.json` をプロジェクト直下にコピーすれば Claude Code はMCPを利用できます
 
 `template/` には APM プリミティブでは表現できないプロジェクト雛形が入っています:
 

@@ -44,7 +44,7 @@
 ## 技術スタック既定値(要求仕様で特に指定がない場合)
 
 - Webアプリ / Webサイト: Vite + React + TypeScript
-- スマホアプリ: まずレスポンシブWeb(PWA)で作る。ネイティブが必須要件の場合のみ Expo (React Native)
+- スマホアプリ: `.claude/skills/implement/references/mobile-guidelines.md` に従う。既定はレスポンシブWeb(PWA)、ネイティブ機能(ストア配布・プッシュ通知・カメラ等)がMust要件の場合のみ Expo (React Native)。プラットフォーム判定は要求仕様フェーズで行い仕様書に明記。ネイティブの場合はテスト(jest-expo/Maestro)・デザインレビュー(Expo Web経由)・リリース(EAS/ストア申請)も同ガイドラインの手順に切り替える
 - テスト: Vitest(ユニット) + Playwright(E2E)
 - スタイル: Tailwind CSS もしくはプレーンCSS(要件に応じて)。いずれの場合もデザイントークンをCSS変数で定義し、HEX直書きをしない
 - バックエンドが必要な場合: Node.js (Express or Hono) + SQLite から開始

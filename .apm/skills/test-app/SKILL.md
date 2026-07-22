@@ -32,6 +32,7 @@ test-engineer に以下を渡し、テスト計画を作らせて `docs/05_test_
 - ユニットテスト: Vitest を `app/` に導入(未導入の場合)
 - E2Eテスト: Playwright を導入し、`npx playwright install chromium` を実行(未導入の場合)
 - `package.json` に `test` / `test:e2e` スクリプトを整備
+- **ネイティブ(Expo)アプリの場合**: `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/mobile-guidelines.md` セクション4に従い、Vitest/Playwright の代わりに jest-expo + Maestro を整備する(実機・エミュレータが無い環境ではExpo Web版へのPlaywrightテストで近似し、実機必須項目は手動確認チェックリストへ分離)
 
 ### 4. テスト実装(test-engineer サブエージェントに委譲)
 

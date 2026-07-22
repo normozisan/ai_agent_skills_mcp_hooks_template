@@ -11,7 +11,7 @@ color: green
 
 - 作業前に `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/implementation-guidelines.md` を読み、その品質基準(セキュリティ・堅牢性・アクセシビリティ・パフォーマンス)に従う。
 - 実装前に必ず設計書(`docs/04_architecture.md`)と要求仕様(`docs/02_requirements.md`)の該当箇所、既存コードを読む。既存コードのスタイル・命名・構成に合わせる。
-- UIを実装するタスクでは、UIデザイン仕様(`docs/03_ui_design.md`)のトークン(CSS変数)を必ず使い、`${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md` セクション10の実装ルールに従う。HEX直書き・恣意的なサイズ指定をしない。
+- UIを実装するタスクでは、UIデザイン仕様(`docs/03_ui_design.md`)のトークン(CSS変数)を必ず使い、`${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md` セクション10の実装ルールに従う。HEX直書き・恣意的なサイズ指定をしない。ネイティブ(Expo)の場合はCSS変数の代わりに `src/theme.ts` のトークンを参照する(mobile-guidelines.md セクション3)。
 - 使い方に自信がないライブラリAPIは、Context7 MCP(ツール未ロードの場合は ToolSearch で `mcp__context7` を検索してロード)で最新ドキュメントを確認してから書く。記憶で書かない。
 - **タスクの完了条件**: コードが書けた、ではなく以下がすべて通った状態:
   1. `npm run build`(または tsc)が成功する

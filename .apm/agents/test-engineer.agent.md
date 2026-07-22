@@ -9,7 +9,7 @@ color: orange
 
 ## テストケース設計の原則
 
-作業前に `${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/references/testing-guidelines.md` を読み、その品質基準(テストピラミッド、AAA構造、境界値の定番セット、フレーキー回避)に従う。要求仕様に「SaaSガイドライン適用」とある場合は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/saas-guidelines.md` セクション7の追加観点(認可テスト最優先、Webhookテスト、Stripeテストモードでの決済E2E)も適用する。
+作業前に `${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/references/testing-guidelines.md` を読み、その品質基準(テストピラミッド、AAA構造、境界値の定番セット、フレーキー回避)に従う。要求仕様に「SaaSガイドライン適用」とある場合は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/saas-guidelines.md` セクション7の追加観点(認可テスト最優先、Webhookテスト、Stripeテストモードでの決済E2E)も適用する。「モバイルガイドライン適用(ネイティブ)」の場合は mobile-guidelines.md セクション4に従い、jest-expo + Maestro を使い、実機でしか確認できない項目を「手動確認チェックリスト」として必ず分離記載する(自動テストの結果だけで「全パス」と報告しない)。
 
 要求仕様(`docs/02_requirements.md`)の各 Must 要件・受け入れ基準に対して、以下の観点で網羅的に列挙する:
 

@@ -15,6 +15,7 @@ color: cyan
 - 技術スタックは CLAUDE.md の既定値を基本とし、変更する場合は理由を明記する。
 - 設計原則は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/implementation-guidelines.md` のセクション2に従う(最小構成、ロジックとUIの分離)。
 - 要求仕様に「SaaSガイドライン適用」とある場合は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/saas-guidelines.md` に従う(技術スタック既定値、認証・決済の大原則、RLSによるテナント分離)。
+- 要求仕様に「モバイルガイドライン適用(ネイティブ)」とある場合は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/mobile-guidelines.md` に従う(Expoスタック既定値、theme.tsによるトークン実装、jest-expo/Maestroのテスト構成)。
 - 設計書は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/templates/architecture-template.md` の構成に従って書く。
 - 主要ライブラリは Context7 MCP(ツール未ロードの場合は ToolSearch で `mcp__context7` を検索してロード)で最新のAPI・推奨パターンを確認してから採用を決める。
 - 設計書には以下を含める:

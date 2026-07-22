@@ -38,6 +38,7 @@ argument-hint: "[デプロイ先の希望(任意)]"
 - **静的Webアプリ(バックエンドなし)**: GitHub Pages / Netlify Drop(アカウント不要度が高い順に提案)
 - **Vercel / Netlify(CLI)**: CLIでのデプロイ手順を用意(実行はユーザー承認後)
 - **ローカル配布のみ**: ビルド成果物と起動手順の説明
+- **ネイティブ(Expo)アプリ**: `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/mobile-guidelines.md` セクション5に従う(EAS Build → TestFlight / Play内部テスト。開発者アカウントの必要性と費用を事前案内し、ストア審査に必要なもの一式をリリースノートにまとめる。審査提出はユーザー自身の操作)
 
 選ばれた方式に必要な設定ファイル(`vite.config` の base パス、リダイレクト設定等)を実装し、ビルドが通ることを確認する。
 

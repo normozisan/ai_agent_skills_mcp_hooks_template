@@ -89,7 +89,7 @@ Claude Code だけで使うなら、リポジトリをクローンして `.apm/s
 | ツール | skills | agents | instructions | hooks | MCP | 備考 |
 |---|---|---|---|---|---|---|
 | Claude Code | ✓ | ✓ | ✓(AGENTS.md) | ✓ | ✓ | **フル機能**。5プロセスすべて動作 |
-| GitHub Copilot | ✓ | ✓ | ✓(copilot-instructions) | ✓ | ✓ | 規約・skills知識を共有。マルチエージェント委譲はClaude Code前提 |
+| GitHub Copilot | ✓ | ✓ | ✓(copilot-instructions) | ✓ | ✓ | VS Codeのチャットで `/` を打つとスキル一覧に表示され `/poc` 等で起動可(自動マッチも有効)。マルチエージェント委譲を伴う `/pipeline` の完全自動はClaude Code推奨 |
 | Cursor ほか | ✓ | 一部 | ✓ | 一部 | ✓ | APMのTargets Matrix準拠 |
 
 skills内部のパス参照(`.claude/skills/...`)はClaude Code向けに書かれているため、**パイプラインの完全自動実行はClaude Codeが推奨環境**です。他ツールでは規約(instructions)と各skills/品質基準がコンテキストとして共有されます。

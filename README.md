@@ -1,162 +1,186 @@
 # ai_agent_skills_mcp_hooks_template
 
-**市場調査 → POC試作 / 本番開発 → テスト → リリース** まで一気通貫で実行できるAIアプリ開発基盤のAPMパッケージです。Claude Code・GitHub Copilot など複数のAIコーディングエージェントで共用できます。
+**市場調査 → POC試作 / 本番開発 → テスト → リリース** まで一気通貫で実行できる、AIアプリ開発基盤のAPMパッケージです。
+`apm install` 一発で、Claude Code・GitHub Copilot など複数のAIコーディングエージェントに同じ開発環境を配備できます。
 
-- **skills 10個**: market-research / requirements / design / implement / test-app / pipeline / poc / promote / iterate / release
-- **agents 8体**: 市場アナリスト、要求エンジニア、UIデザイナー、アーキテクト、実装者、コード/デザインレビュアー、テストエンジニア
-- **品質基準7本**: 調査・仕様・デザイン(AIっぽさ排除)・実装・テスト・SaaS(認証/決済)・モバイル(PWA/ネイティブExpo)
-- **hooks**: セッション開始時に成果物一覧を自動通知(進捗把握)
-- **MCP**: Playwright(E2E・動作確認)+ Context7(最新ライブラリドキュメント)
+| 同梱物 | 内容 |
+|---|---|
+| skills 10個 | market-research / requirements / design / implement / test-app / pipeline / poc / promote / iterate / release |
+| agents 8体 | 市場アナリスト、要求エンジニア、UIデザイナー、アーキテクト、実装者、コードレビュアー、デザインレビュアー、テストエンジニア |
+| 品質基準 7本 | 調査 / 仕様 / デザイン(AIっぽさ排除)/ 実装 / テスト / SaaS(認証・決済)/ モバイル(PWA・ネイティブExpo) |
+| hooks | セッション開始時に成果物一覧を自動通知(進捗把握・途中再開用) |
+| MCP | Playwright(E2E・動作確認)+ Context7(最新ライブラリドキュメント) |
 
-## セットアップ(部内メンバー向け)
+## 目次
 
-### 前提
+1. [クイックスタート](#1-クイックスタート)
+2. [使い方 — 5つの開発プロセス](#2-使い方--5つの開発プロセス)
+3. [出力される成果物](#3-出力される成果物)
+4. [Claude Code と GitHub Copilot の違いと使い分け](#4-claude-code-と-github-copilot-の違いと使い分け)
+5. [トラブルシューティング / FAQ](#5-トラブルシューティング--faq)
+6. [チーム運用ルール](#6-チーム運用ルール)
+7. [リポジトリ構成](#7-リポジトリ構成)
 
-- Node.js LTS(MCPサーバーとアプリ実装に必須): https://nodejs.org
-- APM CLI: https://github.com/danielmeppiel/apm の手順でインストール
-- Python 3.10+(APM CLIの動作要件)
+---
 
-### インストール手順(早見表)
+## 1. クイックスタート
 
-使うツールによって違うのは **`--target` の値と、Claude Codeだけ3行目(権限設定コピー)がある** の2点だけです。開発プロジェクトのフォルダで実行してください。
+### 事前に必要なもの(全員共通)
+
+| ツール | 用途 | 入手先 |
+|---|---|---|
+| Node.js LTS | MCPサーバーの起動・アプリの実装/テスト | https://nodejs.org |
+| Python 3.10+ | APM CLIの動作要件 | https://www.python.org |
+| APM CLI | このパッケージのインストール | https://github.com/danielmeppiel/apm |
+
+### インストール手順(使うツールの列を上から実行するだけ)
+
+ツールによる違いは **`--target` の値** と **Claude Codeだけ手順3がある** の2点だけです。開発プロジェクトのフォルダで実行してください。
 
 | 手順 | GitHub Copilot (VS Code) | Claude Code |
 |---|---|---|
 | 1. パッケージ導入 | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target copilot` | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude` |
 | 2. 規約ファイル生成 | `apm compile -t copilot` | `apm compile` |
-| 3. 権限設定コピー | **不要** | `robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E` |
+| 3. 権限設定コピー | (不要) | `robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E` |
 | 4. 開始 | VS CodeでCopilotを開く | `claude` を起動 |
 
-#### GitHub Copilot はなぜ2コマンドで済むのか
+<details>
+<summary>各手順が何をしているか(クリックで展開)</summary>
 
-skills / agents / hooks / MCP は手順1で `.github/` 等に自動配備され、開発規約は手順2で `.github/copilot-instructions.md` に生成されます。Copilotに必要なものはこれで全部なので、手動コピーはありません。
-
-#### Claude Code の3行目は何をしているのか
-
-`apm install` した時点でパッケージ一式は `apm_modules/` にダウンロード済みです。3行目はその中の `template/`(プロジェクト雛形)をプロジェクト直下にコピーしています。目的はほぼ1つ、**権限の事前許可設定(`.claude/settings.json`)を置くこと**です。
-
-- これが無くても動きますが、npm や git を実行するたびに「許可しますか?」の確認が出て、一気通貫の自動実行が止まりがちになります
-- 一緒にコピーされる `docs/`・`app/` フォルダは出力先の説明用で、無くても実行時に自動生成されます
-- Mac/Linux の場合の3行目: `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`
-
-#### 補足(両ツール共通)
-
+- **手順1**: skills・agents・hooks・MCPが各ツールの規定場所(Copilot: `.github/` 等 / Claude: `.claude/`)に自動配備されます。同時に `apm.yml` / `apm.lock.yaml` が生成されます
+- **手順2**: 開発規約を規定ファイル(Copilot: `.github/copilot-instructions.md` / Claude: `AGENTS.md`)に生成します
+- **手順3(Claude Codeのみ)**: `apm install` 時に `apm_modules/` へダウンロード済みのプロジェクト雛形をコピーします。目的はほぼ1つ、**権限の事前許可設定(`.claude/settings.json`)を置くこと**。これが無くても動きますが、npmやgitの実行ごとに許可確認が出て自動実行が止まりがちになります。一緒にコピーされる `docs/`・`app/` は出力先の説明用で、無くても自動生成されます。Mac/Linuxでは `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`
 - 新規の空フォルダでは `--target` 指定が必須です(既存プロジェクトでは自動検出されます)
-- 手順1で `apm.yml` / `apm.lock.yaml` が生成されるため、これをコミットしておけば、以後のメンバーは `apm install`(引数なし)だけで同一環境を再現できます
 
-### Windowsでの注意
+</details>
 
-- **`Filename too long` エラーが出た場合**: `git config --global core.longpaths true` を実行してから再試行してください(深い階層のフォルダで発生します)
-- **MCPサーバーの登録が進まない場合**: Node.js がインストールされているか確認してください(MCPサーバーは npx 経由で起動されるため必須)。MCP登録に失敗しても skills/agents/hooks は配備済みなので、`template/.mcp.json` をプロジェクト直下にコピーすれば Claude Code はMCPを利用できます
+つまずいたら → [5. トラブルシューティング](#5-トラブルシューティング--faq)
 
-`template/` には APM プリミティブでは表現できないプロジェクト雛形が入っています:
+---
 
-| ファイル | 用途 |
+## 2. 使い方 — 5つの開発プロセス
+
+チャットで `/` を打つとスキル一覧が出ます(Claude Code / VS Code Copilot 共通)。やりたいことに合わせて選んでください:
+
+| # | やりたいこと | コマンド |
+|---|---|---|
+| 1 | テーマだけある → **Web調査つきでPOC試作** | `/poc <テーマ>` |
+| 2 | 仕様書がある → **POC試作**(調査なし) | `/poc --spec 仕様書.md` |
+| 3 | テーマだけある → **いきなり本番開発**(調査から) | `/pipeline <テーマ>` |
+| 4 | 仕様書がある → **いきなり本番開発**(調査なし) | `/pipeline --spec 仕様書.md` |
+| 5 | POCが検証できた → **本番品質に昇格** | `/promote` |
+
+- **完成後**: 機能追加・修正は `/iterate <変更内容>`(仕様書更新→実装→回帰テストまで一貫反映)、公開準備は `/release`
+- **完全自動**: `--auto` を付けると途中の質問なしで走ります(例: `/pipeline --auto <テーマ>`)
+- **途中再開**: `/pipeline` は中断しても再実行すれば完了済みフェーズをスキップして続きから再開します
+
+### 品質はどう担保されるか(本番モード 3・4・5)
+
+- 実装品質チェックリスト(セキュリティ・堅牢性・アクセシビリティ)準拠
+- 独立したcode-reviewerによるレビュー(Critical/High指摘ゼロまで修正ループ)
+- design-reviewerによる実画面スクリーンショット審査(デスクトップ+モバイル幅、「AIっぽい見た目」の排除)
+- 境界値・異常系込みの自動テスト(Vitest + Playwright)
+
+### 対応プラットフォーム
+
+- **Web / Webアプリ / PWA**: 標準対応
+- **スマホアプリ**: 要求仕様フェーズで自動判定。既定はPWA、ストア配布・プッシュ通知等がMust要件なら ネイティブ(Expo)に切り替わり、テスト(jest-expo + Maestro)・リリース(EAS Build → TestFlight / Play内部テスト)もネイティブ手順になります
+- **SaaS(認証・決済・サーバーDB)**: 自動判定でSaaSガイドライン適用(認証を自作しない/カード情報に触れない/Supabase + Stripe既定/特商法表記等の法務要件)
+
+---
+
+## 3. 出力される成果物
+
+本番開発では、一般的な開発文書に相当するドキュメントが `docs/` に自動生成されます。フェーズ間の受け渡しはすべてこのファイル群で行われ、要件ID・テストケースIDが相互参照されます。
+
+| 一般的な呼び名 | ファイル |
 |---|---|
-| `CLAUDE.md` | Claude Code 用のパイプライン規約(クローン利用時。APM利用時はAGENTS.mdで代替可) |
-| `.claude/settings.json` | 権限設定(npm/git等の許可、.env読み取り拒否)+ SessionStartフック |
-| `.mcp.json` | MCP設定(APMを使わずクローンだけで使う場合のフォールバック) |
-| `docs/` `app/` | 成果物・アプリの出力先フォルダ |
-| `.gitignore` | node_modules 等の除外設定 |
+| 市場調査報告書 | `docs/01_market_research.md` |
+| 要求仕様書 / 要件定義書 | `docs/02_requirements.md` |
+| 画面設計書 / デザイン仕様書 | `docs/03_ui_design.md` + `docs/design_preview.html`(ブラウザで見られるモック) |
+| 基本設計書〜詳細設計書 | `docs/04_architecture.md` |
+| テスト計画書 / テスト仕様書 | `docs/05_test_plan.md` |
+| テスト結果報告書 | `docs/06_test_report.md` |
+| リリースノート | `docs/07_release.md`(`/release` 実行時) |
 
-### APMを使わない場合(クローン利用)
+アプリ本体は `app/` に出力されます。POC(プロセス1・2)では軽量版(`docs/poc/` にPOC仕様1ページ+POCレポート)のみ生成されます。
 
-Claude Code だけで使うなら、リポジトリをクローンして `.apm/skills` → `.claude/skills`、`.apm/agents` → `.claude/agents` にコピーし、`template/` の中身をプロジェクト直下に置くだけでも動きます。
+---
 
-## 使い方(5つの開発プロセス)
+## 4. Claude Code と GitHub Copilot の違いと使い分け
 
-| # | プロセス | コマンド(Claude Codeのスラッシュコマンド) |
+**結論: どちらでも使えますが、`/pipeline` の5フェーズ完全自動はClaude Code、Copilotはフェーズを1つずつ回す運転が現実的です。**(2026年7月時点)
+
+| | Claude Code | GitHub Copilot |
 |---|---|---|
-| 1 | テーマ→Web調査→**POC試作** | `/poc <テーマ>` |
-| 2 | 仕様書→**POC試作**(調査なし) | `/poc --spec 仕様書.md` |
-| 3 | テーマ→**いきなり本番開発**(調査から) | `/pipeline <テーマ>` |
-| 4 | 仕様書→**いきなり本番開発**(調査なし) | `/pipeline --spec 仕様書.md` |
-| 5 | POCを**本番品質に昇格** | `/promote` |
+| スラッシュコマンド起動 | ○ | ○(VS Codeチャットで `/` から選択、自動マッチも有効) |
+| `/pipeline` 一発の5フェーズ完全自動 | **○** | ×(メインのAIが1人で順にこなす形になる) |
+| 並列エージェントの起動主体 | エージェント自身が判断して8体に委譲 | ユーザーが `/fleet`(Copilot CLI)で明示的に起動 |
+| 独立レビュアーによる検証ループ | ○(実装者と別コンテキストのレビュアー) | 限定的 |
 
-完成後: 機能追加・修正は `/iterate <変更内容>`、公開準備は `/release`。
-`--auto` を付けると質問なしの完全自動(例: `/pipeline --auto <テーマ>`)。
+### Copilotでの推奨の使い方
 
-本番モード(3・4・5)では、実装品質チェックリスト・コードレビュー(Critical/Highゼロまで)・スクリーンショットによるデザイン審査・境界値/異常系込みの自動テストが自動で効きます。認証・決済・サーバーDBを含むアプリにはSaaSガイドライン(Supabase/Stripe前提、特商法表記等の法務要件含む)が自動適用されます。
-
-**スマホアプリも5プロセス対応**です。要求仕様フェーズでプラットフォーム判定(既定はPWA、ストア配布・プッシュ通知等がMust要件ならネイティブExpo)が行われ、ネイティブの場合はテスト(jest-expo + Maestro)・デザインレビュー(Expo Web経由)・リリース(EAS Build → TestFlight / Play内部テスト)が自動で切り替わります。E2Eに実機/エミュレータが無い場合は実機必須項目が「手動確認チェックリスト」として成果物に分離記載されます。
-
-## 出力される成果物
-
-本番開発では `docs/` に番号付きドキュメントが自動生成されます:
-
-`01_market_research.md`(市場調査)→ `02_requirements.md`(要求仕様)→ `03_ui_design.md` + `design_preview.html`(デザイン仕様+モック)→ `04_architecture.md`(設計)→ `05_test_plan.md`(テスト仕様)→ `06_test_report.md`(テスト結果)→ `07_release.md`(リリースノート)。アプリ本体は `app/` に出力されます。
-
-## ツール別の対応状況
-
-| ツール | skills | agents | instructions | hooks | MCP | 備考 |
-|---|---|---|---|---|---|---|
-| Claude Code | ✓ | ✓ | ✓(AGENTS.md) | ✓ | ✓ | **フル機能**。5プロセスすべて動作 |
-| GitHub Copilot | ✓ | ✓ | ✓(copilot-instructions) | ✓ | ✓ | VS Codeのチャットで `/` を打つとスキル一覧に表示され `/poc` 等で起動可(自動マッチも有効)。マルチエージェント委譲を伴う `/pipeline` の完全自動はClaude Code推奨 |
-| Cursor ほか | ✓ | 一部 | ✓ | 一部 | ✓ | APMのTargets Matrix準拠 |
-
-skills内部のパス参照(`.claude/skills/...`)はClaude Code向けに書かれているため、**パイプラインの完全自動実行はClaude Codeが推奨環境**です。他ツールでは規約(instructions)と各skills/品質基準がコンテキストとして共有されます。
-
-## Tips: Claude Code と GitHub Copilot の使い分け(2026年7月時点)
-
-### `/pipeline` の動き方はツールで違う
-
-| | 並列エージェントの起動主体 | `/pipeline` 一発での5フェーズ完全自動 |
-|---|---|---|
-| Claude Code | **エージェント自身**が判断してサブエージェント8体に委譲(スキルの指示どおり並列実行) | ○ |
-| GitHub Copilot | **ユーザー**が `/fleet` で明示的に起動(エージェントは自発的に委譲できない) | ×(メインエージェントが1人で順にこなす形になる) |
-
-`/pipeline` スキル内の「サブエージェントに並列委譲」という指示はClaude CodeのAgentツール前提の記述のため、Copilotでは実行されません。**CopilotではメインのAIが1人で順番にこなす動き**になります。
-
-### Copilotでの推奨の使い方: フェーズを1つずつ回す
+フェーズを1つずつ実行します。フェーズ間の受け渡しは `docs/` のファイルで行う設計のため、**1つずつでも品質・成果物はClaude Codeと同一**です:
 
 ```
-/market-research <テーマ>
-/requirements
-/design
-/implement
-/test-app
+/market-research <テーマ> → /requirements → /design → /implement → /test-app
 ```
 
-一発全自動でなくても品質が落ちない理由: この基盤は**フェーズ間の受け渡しをAIの記憶ではなく `docs/` のファイルで行う**設計のため、1フェーズずつ実行しても要件ID・テストIDの相互参照や品質基準は完全に保たれます。
-
-### Copilot CLI の `/fleet` と組み合わせる
-
-2026年4月リリースの `/fleet`(Copilot CLI)で、並列にしたい箇所だけ手動でファンアウトできます:
-
-```
-/fleet <テーマ>の市場調査。競合A・B・Cの機能/料金/レビュー不満を独立に調査し、
-       docs/research_a.md, _b.md, _c.md に出力
-→ その後 /market-research で統合
-```
-
-注意: `/fleet` にはファイルロックが無いため(公式明記)、**同じファイルを複数エージェントに書かせない**こと。出力先を分けて統合はスキルに任せるのが安全です。
+並列にしたい箇所(調査のファンアウト等)は Copilot CLI の `/fleet` を手動で組み合わせられます。その際、`/fleet` にはファイルロックが無いため**同じファイルを複数エージェントに書かせない**こと(出力先を分けて、統合はスキルに任せる)。
 
 ### 途中でツールを乗り換えられる
 
-成果物がファイルベースなので、例えば「市場調査と要求仕様はCopilotで → 実装以降(独立レビューのループが効く部分)はClaude Codeで `/implement` から」という運用が成立します。`/pipeline` には docs/ を見て完了フェーズをスキップする再開ロジックが入っているため、どちらのツールから再開しても噛み合います。
+成果物がファイルベースなので「調査・仕様はCopilot → 実装以降はClaude Codeで `/implement` から」という運用も成立します。再開ロジックがdocs/を見て完了フェーズをスキップするため、どちらから再開しても噛み合います。
 
-### 何がClaude Code固有の強みか
+### なぜ完全自動はClaude Code推奨なのか
 
-品質の核である「実装 → **独立したコンテキストを持つ** code-reviewer / design-reviewer によるレビュー → 修正ループ」は、役割定義されたサブエージェントへの委譲で成り立っています。実装した本人がセルフチェックするのではなく、思い込みを引き継がない別の目で検証する構造です。ここが現時点でClaude Codeを推奨環境とする理由です。
+品質の核である「実装 → 独立したコンテキストを持つレビュアーの審査 → 修正ループ」と「スキルからスキルを呼ぶオーケストレーション」がClaude Codeのサブエージェント機構に乗っているためです。この領域は機能追加が速いので、導入時に各ツールで一度試走することを推奨します。
 
-※ この領域は機能追加が非常に速いため、上記は2026年7月時点の整理です。Copilot側にエージェントの自律的なサブエージェント起動が入れば差は縮まります。導入時に各ツールで一度試走することを推奨します。
+---
 
-## 更新の反映
+## 5. トラブルシューティング / FAQ
 
-このリポジトリが更新されたら、各自のプロジェクトで:
+**Q. `git config` の `Filename too long` エラーが出る(Windows)**
+`git config --global core.longpaths true` を実行してから再試行してください。深い階層のフォルダで発生します。
 
-```bash
-apm update && apm compile
-```
+**Q. MCPサーバーの登録が進まない / 失敗する**
+Node.js がインストールされているか確認してください(MCPは npx 経由で起動)。MCP登録に失敗しても skills/agents/hooks は配備済みです。Claude Code なら `template/.mcp.json` をプロジェクト直下にコピーすれば MCP を利用できます。
 
-## リポジトリ構成
+**Q. `template/` フォルダには何が入っているの?**
+
+| ファイル | 用途 |
+|---|---|
+| `.claude/settings.json` | 権限設定(npm/git等の事前許可、`.env` 読み取り拒否)+ SessionStartフック |
+| `.mcp.json` | MCP設定(APMのMCP登録が失敗した場合のフォールバック) |
+| `CLAUDE.md` | パイプライン規約(クローン利用時用。APM利用時は `AGENTS.md` で代替) |
+| `docs/` `app/` | 成果物・アプリの出力先(無くても自動生成) |
+| `.gitignore` | node_modules 等の除外設定 |
+
+**Q. APMを使わずに導入できる?**
+できます(Claude Code のみ)。リポジトリをクローンし、`.apm/skills` → `.claude/skills`、`.apm/agents` → `.claude/agents` にコピーして、`template/` の中身をプロジェクト直下に置いてください。
+
+**Q. Claude Code で権限確認が頻発する**
+クイックスタート手順3(`template/` のコピー)を実行したか確認してください。`.claude/settings.json` が権限を事前許可します。
+
+---
+
+## 6. チーム運用ルール
+
+- **このリポジトリがマスター**です。改良はクローンして編集 → push(またはPR)
+- 各メンバーはプロジェクトで `apm update && apm compile` を実行すると最新版に追従できます
+- プロジェクト側の `apm.yml` / `apm.lock.yaml` はコミットしてください。2人目以降は引数なしの `apm install` だけで同一環境を再現できます
+- 本番パイプラインはサブエージェントを多数動かすためトークン消費が相応にあります。**POCは気軽に、本番パイプラインは作る価値のあるものに**が推奨の温度感です
+
+---
+
+## 7. リポジトリ構成
 
 ```
 ├── apm.yml                  ← APMマニフェスト(MCP依存: playwright, context7)
 ├── .apm/
-│   ├── skills/              ← 10 skills(品質基準・テンプレート同梱)
+│   ├── skills/              ← 10 skills(品質基準7本・成果物テンプレート同梱)
 │   ├── agents/              ← 8 agents(*.agent.md)
-│   ├── instructions/        ← パイプライン規約(AGENTS.md/copilot-instructionsに展開)
+│   ├── instructions/        ← パイプライン規約(AGENTS.md / copilot-instructions に展開)
 │   └── hooks/               ← SessionStartフック(進捗自動通知)
-└── template/                ← プロジェクト雛形(手動コピー)
+└── template/                ← プロジェクト雛形(Claude Code利用時に手動コピー)
 ```

@@ -16,31 +16,36 @@
 - APM CLI: https://github.com/danielmeppiel/apm の手順でインストール
 - Python 3.10+(APM CLIの動作要件)
 
-### インストール(3ステップ)
+### インストール手順(GitHub Copilot / VS Code)— コマンド2つで完了
 
 開発プロジェクトのフォルダで:
 
 ```bash
-# 1. このパッケージをインストール(使うツールを --target で指定)
-apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude
-#   Copilot(VS Code)の場合: --target copilot
-#   ※ 新規の空フォルダでは --target 指定が必須(既存プロジェクトでは自動検出)
-
-# 2. 使っているツール向けにコンパイル(規約ファイルを生成)
-apm compile              # AGENTS.md を生成(CLI系ツールが読む)
-apm compile -t copilot   # .github/copilot-instructions.md を生成(VS Code / Copilot用)
-
-# 3. プロジェクト雛形をコピー(成果物フォルダ・権限設定など)
-#    このリポジトリの template/ の中身をプロジェクト直下にコピーする
+apm install normozisan/ai_agent_skills_mcp_hooks_template --target copilot
+apm compile -t copilot
 ```
 
-`--target claude` でインストールすると以下が自動配備されます(動作確認済み):
+これだけです(手動コピー不要)。skills/agents/hooks/MCPが `.github/` 等に配備され、規約が `.github/copilot-instructions.md` に生成されるので、あとはVS CodeでCopilotを使い始めればOKです。
 
-- `.claude/skills/` に10 skills(品質基準・テンプレート同梱)
-- `.claude/agents/` に8 agents
-- `.claude/rules/` にパイプライン規約
-- `.claude/settings.json` に SessionStart フックをマージ
-- `apm.yml` / `apm.lock.yaml` に依存が記録され、以後は `apm install` だけで再現可能
+### インストール手順(Claude Code)— コマンド3つで完了
+
+開発プロジェクトのフォルダで:
+
+```powershell
+apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude
+apm compile
+robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E
+```
+
+(Mac/Linuxの3行目: `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`)
+
+あとは `claude` を起動するだけです。
+
+- 1行目: skills 10・agents 8・規約・SessionStartフック・MCPを `.claude/` に自動配備(動作確認済み)。依存は `apm.yml` / `apm.lock.yaml` に記録され、以後メンバーは `apm install` だけで再現可能
+- 2行目: 規約を `AGENTS.md` に生成
+- 3行目: **権限設定(`.claude/settings.json`)のコピーが目的**。これが無くても動きますが、コマンド実行のたびに許可確認が出て自動実行が止まりがちになります。`docs/`・`app/` フォルダ等も一緒にコピーされますが、これらは無くても実行時に自動生成されます
+
+※ 新規の空フォルダでは `--target` 指定が必須です(既存プロジェクトでは自動検出されます)。
 
 ### Windowsでの注意
 

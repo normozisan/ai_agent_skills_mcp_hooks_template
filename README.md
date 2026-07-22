@@ -16,36 +16,33 @@
 - APM CLI: https://github.com/danielmeppiel/apm の手順でインストール
 - Python 3.10+(APM CLIの動作要件)
 
-### インストール手順(GitHub Copilot / VS Code)— コマンド2つで完了
+### インストール手順(早見表)
 
-開発プロジェクトのフォルダで:
+使うツールによって違うのは **`--target` の値と、Claude Codeだけ3行目(権限設定コピー)がある** の2点だけです。開発プロジェクトのフォルダで実行してください。
 
-```bash
-apm install normozisan/ai_agent_skills_mcp_hooks_template --target copilot
-apm compile -t copilot
-```
+| 手順 | GitHub Copilot (VS Code) | Claude Code |
+|---|---|---|
+| 1. パッケージ導入 | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target copilot` | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude` |
+| 2. 規約ファイル生成 | `apm compile -t copilot` | `apm compile` |
+| 3. 権限設定コピー | **不要** | `robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E` |
+| 4. 開始 | VS CodeでCopilotを開く | `claude` を起動 |
 
-これだけです(手動コピー不要)。skills/agents/hooks/MCPが `.github/` 等に配備され、規約が `.github/copilot-instructions.md` に生成されるので、あとはVS CodeでCopilotを使い始めればOKです。
+#### GitHub Copilot はなぜ2コマンドで済むのか
 
-### インストール手順(Claude Code)— コマンド3つで完了
+skills / agents / hooks / MCP は手順1で `.github/` 等に自動配備され、開発規約は手順2で `.github/copilot-instructions.md` に生成されます。Copilotに必要なものはこれで全部なので、手動コピーはありません。
 
-開発プロジェクトのフォルダで:
+#### Claude Code の3行目は何をしているのか
 
-```powershell
-apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude
-apm compile
-robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E
-```
+`apm install` した時点でパッケージ一式は `apm_modules/` にダウンロード済みです。3行目はその中の `template/`(プロジェクト雛形)をプロジェクト直下にコピーしています。目的はほぼ1つ、**権限の事前許可設定(`.claude/settings.json`)を置くこと**です。
 
-(Mac/Linuxの3行目: `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`)
+- これが無くても動きますが、npm や git を実行するたびに「許可しますか?」の確認が出て、一気通貫の自動実行が止まりがちになります
+- 一緒にコピーされる `docs/`・`app/` フォルダは出力先の説明用で、無くても実行時に自動生成されます
+- Mac/Linux の場合の3行目: `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`
 
-あとは `claude` を起動するだけです。
+#### 補足(両ツール共通)
 
-- 1行目: skills 10・agents 8・規約・SessionStartフック・MCPを `.claude/` に自動配備(動作確認済み)。依存は `apm.yml` / `apm.lock.yaml` に記録され、以後メンバーは `apm install` だけで再現可能
-- 2行目: 規約を `AGENTS.md` に生成
-- 3行目: **権限設定(`.claude/settings.json`)のコピーが目的**。これが無くても動きますが、コマンド実行のたびに許可確認が出て自動実行が止まりがちになります。`docs/`・`app/` フォルダ等も一緒にコピーされますが、これらは無くても実行時に自動生成されます
-
-※ 新規の空フォルダでは `--target` 指定が必須です(既存プロジェクトでは自動検出されます)。
+- 新規の空フォルダでは `--target` 指定が必須です(既存プロジェクトでは自動検出されます)
+- 手順1で `apm.yml` / `apm.lock.yaml` が生成されるため、これをコミットしておけば、以後のメンバーは `apm install`(引数なし)だけで同一環境を再現できます
 
 ### Windowsでの注意
 

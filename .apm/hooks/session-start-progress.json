@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -Command \"if (Test-Path docs) { Write-Output '--- pipeline progress: existing deliverables in docs/ ---'; Get-ChildItem docs -Recurse -Filter *.md -Name } else { Write-Output 'pipeline progress: no deliverables yet (docs/ empty)' }\""
+          }
+        ]
+      }
+    ]
+  }
+}

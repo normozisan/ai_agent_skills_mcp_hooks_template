@@ -1,0 +1,9 @@
+name: ai-agent-skills-mcp-hooks-template
+version: 1.0.0
+description: 市場調査からPOC試作・本番開発・テスト・リリースまで一気通貫で実行するAIアプリ開発基盤(skills 10 / agents 8 / hooks / MCP)
+dependencies:
+  mcp:
+    - name: io.github.microsoft/playwright-mcp
+      transport: stdio
+    - name: io.github.upstash/context7
+      transport: stdio

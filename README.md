@@ -62,6 +62,34 @@
 
 チャットで `/` を打つとスキル一覧が出ます(Claude Code / VS Code Copilot 共通)。やりたいことに合わせて選んでください:
 
+<details>
+<summary>パイプライン全体図(状態遷移グラフ — クリックで展開)</summary>
+
+決定的な骨格(フェーズと完了ゲート)の中でだけAIが知能を発揮するグラフ構造です。ゲートを通らない限り次へ進めず、差し戻しエッジには周回上限があります。
+
+```mermaid
+flowchart TD
+    IDEA([テーマ or 仕様書]) --> MR
+    IDEA -. "--spec(調査スキップ)" .-> REQ
+    MR["市場調査<br/>01_market_research.md"] --> REQ
+    REQ["要求仕様<br/>02_requirements.md<br/>ゲート: 全Mustに受け入れ基準"] --> DES
+    DES["UIデザイン<br/>03_ui_design.md + プレビュー"] --> IMPL
+    IMPL["設計・実装<br/>04_architecture.md + app/"] --> CR{コードレビュー<br/>Critical/High = 0?}
+    CR -- "指摘あり(最大2周)" --> IMPL
+    CR -- 合格 --> DR{デザインレビュー<br/>スクショ審査}
+    DR -- "要修正(最大3周)" --> IMPL
+    DR -- 合格 --> TEST["テスト<br/>05_test_plan / 06_test_report"]
+    TEST -- "失敗→修正(最大3周)" --> TEST
+    TEST -- 全パス --> DONE([完成])
+    DONE -. "/release" .-> REL["リリース<br/>07_release.md"]
+    DONE -. "/iterate(仕様書更新→回帰)" .-> REQ
+    DONE -. "/refine(数値ゴール改善)" .-> RFN["計測→改善ループ<br/>08_refine_report.md"]
+```
+
+`/poc` はこのグラフの軽量短絡版(軽量調査→1ページ仕様→実装→スモーク確認)で、`/promote` で本流の要求仕様ノードに合流します。
+
+</details>
+
 | # | やりたいこと | コマンド |
 |---|---|---|
 | 1 | テーマだけある → **Web調査つきでPOC試作** | `/poc <テーマ>` |
@@ -70,7 +98,7 @@
 | 4 | 仕様書がある → **いきなり本番開発**(調査なし) | `/pipeline --spec 仕様書.md` |
 | 5 | POCが検証できた → **本番品質に昇格** | `/promote` |
 
-- **完成後**: 機能追加・修正は `/iterate <変更内容>`(仕様書更新→実装→回帰テストまで一貫反映)、公開準備は `/release`
+- **完成後**: 機能追加・修正は `/iterate <変更内容>`(仕様書更新→実装→回帰テストまで一貫反映)、公開準備は `/release`、数値目標の追い込みは `/refine <測定可能なゴール>`(計測→改善→再計測を到達まで自動反復。例: `/refine Lighthouse Performance 90以上`)
 - **完全自動**: `--auto` を付けると途中の質問なしで走ります(例: `/pipeline --auto <テーマ>`)
 - **途中再開**: `/pipeline` は中断しても再実行すれば完了済みフェーズをスキップして続きから再開します
 
@@ -102,6 +130,7 @@
 | テスト計画書 / テスト仕様書 | `docs/05_test_plan.md` |
 | テスト結果報告書 | `docs/06_test_report.md` |
 | リリースノート | `docs/07_release.md`(`/release` 実行時) |
+| 改善ループ記録 | `docs/08_refine_report.md`(`/refine` 実行時。計測値の推移・採用/巻き戻しの記録) |
 
 アプリ本体は `app/` に出力されます。POC(プロセス1・2)では軽量版(`docs/poc/` にPOC仕様1ページ+POCレポート)のみ生成されます。
 

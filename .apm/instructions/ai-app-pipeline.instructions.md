@@ -22,6 +22,7 @@ applyTo: "**"
 | POC試作 | `/poc` | market-analyst(軽量), implementer | `docs/poc/` + `app/`(試作品) |
 | POC→本番昇格 | `/promote` | code-reviewer ほか全員 | 正式パイプラインへ移行 |
 | 数値ゴール改善 | `/refine` | implementer | `docs/08_refine_report.md`(計測→改善ループの記録) |
+| AIユーザー評価 | `/user-test` | user-simulator, implementer | `docs/09_user_eval.md`(評価→改善ループの記録) |
 
 ## 開発モード
 

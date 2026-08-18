@@ -5,8 +5,8 @@
 
 | 同梱物 | 内容 |
 |---|---|
-| skills 11個 | market-research / requirements / design / implement / test-app / pipeline / poc / promote / iterate / release / refine |
-| agents 8体 | 市場アナリスト、要求エンジニア、UIデザイナー、アーキテクト、実装者、コードレビュアー、デザインレビュアー、テストエンジニア |
+| skills 12個 | market-research / requirements / design / implement / test-app / pipeline / poc / promote / iterate / release / refine / user-test |
+| agents 9体 | 市場アナリスト、要求エンジニア、UIデザイナー、アーキテクト、実装者、コードレビュアー、デザインレビュアー、テストエンジニア、AIユーザー(ペルソナ評価) |
 | 品質基準 7本 | 調査 / 仕様 / デザイン(AIっぽさ排除)/ 実装 / テスト / SaaS(認証・決済)/ モバイル(PWA・ネイティブExpo) |
 | hooks | セッション開始時に成果物一覧を自動通知(進捗把握・途中再開用) |
 | MCP | Playwright(E2E・動作確認)+ Context7(最新ライブラリドキュメント) |
@@ -70,7 +70,7 @@
 | 4 | 仕様書がある → **いきなり本番開発**(調査なし) | `/pipeline --spec 仕様書.md` |
 | 5 | POCが検証できた → **本番品質に昇格** | `/promote` |
 
-- **完成後**: 機能追加・修正は `/iterate <変更内容>`、公開準備は `/release`、数値目標の追い込みは `/refine <測定可能なゴール>`(例: `/refine Lighthouse Performance 90以上`)
+- **完成後**: 機能追加・修正は `/iterate <変更内容>`、公開準備は `/release`、数値目標の追い込みは `/refine <測定可能なゴール>`(例: `/refine Lighthouse Performance 90以上`)、**ユーザー目線の仕上げは `/user-test`**(市場調査のペルソナになりきったAIユーザーがPlaywrightで実操作→4軸20点で採点→不満上位2件を改善、を合格ライン(既定16/20、最大3ラウンド)まで自動反復)
 - **完全自動**: `--auto` を付けると途中の質問なしで走ります(例: `/pipeline --auto <テーマ>`)
 - **途中再開**: `/pipeline` は中断しても再実行すれば完了済みフェーズをスキップして続きから再開します
 
@@ -117,6 +117,8 @@ flowchart TD
 
 <details>
 <summary>上級Tips: /refine・/goal・/loop の使い分け(クリックで展開)</summary>
+
+なお「AIユーザーが満足するまで評価→改善を回す」は、長い `/goal` 文を書かなくても **`/user-test` 一発**でできます(ループ・合格ライン・上限・記録すべて内蔵)。以下は数値ゴール系の使い分けです。
 
 役割の違う3層で、組み合わせ可能です:
 
@@ -173,6 +175,7 @@ flowchart TD
 | テスト結果報告書 | `docs/06_test_report.md` |
 | リリースノート | `docs/07_release.md`(`/release` 実行時) |
 | 改善ループ記録 | `docs/08_refine_report.md`(`/refine` 実行時。計測値の推移・採用/巻き戻しの記録) |
+| AIユーザー評価レポート | `docs/09_user_eval.md`(`/user-test` 実行時。採点推移・改善記録。※実ユーザーの代用ではなく「見せる前の粗取り」) |
 
 アプリ本体は `app/` に出力されます。POC(プロセス1・2)では軽量版(`docs/poc/` にPOC仕様1ページ+POCレポート)のみ生成されます。
 
@@ -249,8 +252,8 @@ Node.js がインストールされているか確認してください(MCPは n
 ```
 ├── apm.yml                  ← APMマニフェスト(MCP依存: playwright, context7)
 ├── .apm/
-│   ├── skills/              ← 11 skills(品質基準7本・成果物テンプレート同梱)
-│   ├── agents/              ← 8 agents(*.agent.md)
+│   ├── skills/              ← 12 skills(品質基準7本・成果物テンプレート同梱)
+│   ├── agents/              ← 9 agents(*.agent.md)
 │   ├── instructions/        ← パイプライン規約(AGENTS.md / copilot-instructions に展開)
 │   └── hooks/               ← SessionStartフック(進捗自動通知)
 └── template/                ← プロジェクト雛形(Claude Code利用時に手動コピー)

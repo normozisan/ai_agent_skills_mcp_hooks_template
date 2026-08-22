@@ -1,7 +1,6 @@
 ---
 name: implementer
 description: 実装専門のエンジニア。設計書に基づいたコーディング作業(機能実装、バグ修正、レビュー指摘の修正)を委譲するときに使う。1タスク=1起動で使うこと。
-model: inherit
 color: green
 ---
 

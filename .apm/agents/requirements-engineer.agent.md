@@ -1,8 +1,6 @@
 ---
 name: requirements-engineer
 description: 要求定義・要件定義の専門家。市場調査結果からユーザーストーリー、機能要件、非機能要件、受け入れ基準、MVPスコープの策定を委譲するときに使う。
-tools: Read, Write, Glob, Grep, WebSearch, WebFetch, ToolSearch
-model: inherit
 color: purple
 ---
 

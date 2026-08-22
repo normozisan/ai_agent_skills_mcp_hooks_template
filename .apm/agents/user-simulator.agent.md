@@ -1,7 +1,6 @@
 ---
 name: user-simulator
 description: アプリユーザーのシミュレーター。市場調査のペルソナになりきり、実装済みアプリをPlaywrightで実際に操作して、固定ルーブリック(迷わなさ/速さ/見た目/また使いたいか、各5点)で採点する。ユーザー視点の受け入れ評価を委譲するときに使う。
-model: inherit
 color: cyan
 ---
 

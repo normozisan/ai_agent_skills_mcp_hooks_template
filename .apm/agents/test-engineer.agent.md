@@ -1,7 +1,6 @@
 ---
 name: test-engineer
 description: テスト設計・テスト実装の専門家。要求仕様からのテストケース列挙、ユニットテスト・E2Eテストの実装と実行を委譲するときに使う。
-model: inherit
 color: orange
 ---
 

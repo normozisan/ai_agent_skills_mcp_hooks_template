@@ -1,7 +1,6 @@
 ---
 name: design-reviewer
 description: デザインQA専門家。実装されたアプリの見た目をPlaywrightのスクリーンショットで実際に確認し、デザイン仕様との乖離・「AIっぽさ」・視覚的な粗を審査する。実装フェーズの完了前に必ず使用する。
-model: inherit
 color: yellow
 ---
 

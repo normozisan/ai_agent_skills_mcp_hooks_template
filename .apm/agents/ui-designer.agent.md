@@ -1,8 +1,6 @@
 ---
 name: ui-designer
 description: プロフェッショナルUI/UXデザイナー。アートディレクション策定、デザインシステム(トークン・タイポグラフィ・カラー)構築、画面デザイン仕様の作成、デザインプレビューHTMLの制作を委譲するときに使う。「AIが作ったような見た目」を避けたい場面で必ず使用する。
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
-model: inherit
 color: pink
 ---
 

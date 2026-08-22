@@ -12,7 +12,7 @@ argument-hint: "[デザインの要望・参考にしたい雰囲気(任意)]"
 
 ## 大原則
 
-`${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md` を最初に読むこと。このフェーズおよび後続の実装は、そこに定義されたプロ品質基準と「AIっぽさ」アンチパターンチェックリストに全面的に従う。
+このスキル内の `references/design-guidelines.md` を最初に読むこと。このフェーズおよび後続の実装は、そこに定義されたプロ品質基準と「AIっぽさ」アンチパターンチェックリストに全面的に従う。
 
 ## 手順
 
@@ -26,15 +26,15 @@ argument-hint: "[デザインの要望・参考にしたい雰囲気(任意)]"
 
 ui-designer に要求仕様・市場調査・ユーザーのデザイン要望を渡し、**方向性の異なるアートディレクション案を3つ**作らせる(例: 「ミニマル×信頼」「温かみ×手書き感」「大胆×コントラスト」)。各案にコンセプト名・ムードワード・フォント・パレット(HEX)を含めること。
 
-### 3. 方向性の決定(AskUserQuestion)
+### 3. 方向性の決定(ユーザーへの確認)
 
-3案を AskUserQuestion で提示し、ユーザーに選んでもらう(各案の説明にムード・色・フォントを記載)。
+3案を選択肢として提示し、ユーザーに選んでもらう(各案の説明にムード・色・フォントを記載)。
 (`--auto` モードの場合: ペルソナと差別化ポイントに最も適合する案を自分で選び、選定理由を成果物に記録する。)
 
 ### 4. デザイン仕様書の作成(ui-designer サブエージェントに委譲)
 
 選ばれた方向性で、ui-designer にデザイン仕様書を作らせて `docs/03_ui_design.md` に保存する:
-- 入力: 決定した方向性、`docs/02_requirements.md` の画面一覧、テンプレート `${CLAUDE_PROJECT_DIR}/.claude/skills/design/templates/ui-design-template.md`、ガイドライン `${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md`
+- 入力: 決定した方向性、`docs/02_requirements.md` の画面一覧、テンプレート このスキル内の `templates/ui-design-template.md`、ガイドライン このスキル内の `references/design-guidelines.md`
 - デザイントークンはそのままCSS変数として実装に貼れる形式で書かせる
 
 ### 5. デザインプレビューの生成(ui-designer サブエージェントに委譲)

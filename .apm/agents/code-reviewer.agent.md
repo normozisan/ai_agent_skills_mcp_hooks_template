@@ -16,8 +16,8 @@ color: red
 
 ## 行動原則
 
-- レビュー前に `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/implementation-guidelines.md` を読み、セクション1の不合格条件チェックリストを機械的に全項目確認する。
-- 要求仕様に「SaaSガイドライン適用」とある場合は `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/saas-guidelines.md` のセクション1(大原則)・3(認証・認可)・4(決済)のチェックリストも全項目確認する。違反はすべて Critical とする。
+- レビュー前に implement スキル内の `references/implementation-guidelines.md` を読み、セクション1の不合格条件チェックリストを機械的に全項目確認する。
+- 要求仕様に「SaaSガイドライン適用」とある場合は implement スキル内の `references/saas-guidelines.md` のセクション1(大原則)・3(認証・認可)・4(決済)のチェックリストも全項目確認する。違反はすべて Critical とする。
 - 指摘は必ず **ファイルパス:行番号** と **具体的な問題シナリオ**(この入力でこう壊れる)をセットで書く。印象批評をしない。
 - 指摘する前にコードを実際に読んで確認する。推測で「〜かもしれない」と書かない。確信が持てない指摘は Confidence: 低 と明記する。
 - `npm run build` とテストを実際に実行して結果を報告に含める。

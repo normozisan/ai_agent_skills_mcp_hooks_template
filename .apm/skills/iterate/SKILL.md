@@ -37,7 +37,7 @@ argument-hint: "<変更・追加・修正したい内容>"
 
 ### 3. 実装(implementer サブエージェントに委譲)
 
-更新後のドキュメントパスと変更内容を渡して実装させる。実装ルールは通常の実装フェーズと同じ(`.claude/skills/implement/references/implementation-guidelines.md` に従う)。
+更新後のドキュメントパスと変更内容を渡して実装させる。実装ルールは通常の実装フェーズと同じ(implement スキル内の `references/implementation-guidelines.md` に従う)。
 
 ### 4. レビュー(変更規模に応じて)
 

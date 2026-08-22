@@ -22,8 +22,8 @@ argument-hint: "[テストに関する追加指示(任意)]"
 test-engineer に以下を渡し、テスト計画を作らせて `docs/05_test_plan.md` に保存する:
 - `docs/02_requirements.md` のパス(全Must要件と受け入れ基準を網羅するよう指示)
 - 観点: 正常系 / 境界値 / 異常系 / データ永続化 / UI表示
-- 出力テンプレート: `${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/templates/test-plan-template.md` のパス
-- 品質基準: `${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/references/testing-guidelines.md` のパス(境界値の定番セットを適用)
+- 出力テンプレート: このスキル内の `templates/test-plan-template.md` のパス
+- 品質基準: このスキル内の `references/testing-guidelines.md` のパス(境界値の定番セットを適用)
 
 計画をユーザーに要約提示する(テストケース数、自動化対象の内訳)。
 
@@ -32,13 +32,13 @@ test-engineer に以下を渡し、テスト計画を作らせて `docs/05_test_
 - ユニットテスト: Vitest を `app/` に導入(未導入の場合)
 - E2Eテスト: Playwright を導入し、`npx playwright install chromium` を実行(未導入の場合)
 - `package.json` に `test` / `test:e2e` スクリプトを整備
-- **ネイティブ(Expo)アプリの場合**: `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/mobile-guidelines.md` セクション4に従い、Vitest/Playwright の代わりに jest-expo + Maestro を整備する(実機・エミュレータが無い環境ではExpo Web版へのPlaywrightテストで近似し、実機必須項目は手動確認チェックリストへ分離)
+- **ネイティブ(Expo)アプリの場合**: implement スキル内の `references/mobile-guidelines.md` セクション4に従い、Vitest/Playwright の代わりに jest-expo + Maestro を整備する(実機・エミュレータが無い環境ではExpo Web版へのPlaywrightテストで近似し、実機必須項目は手動確認チェックリストへ分離)
 
 ### 4. テスト実装(test-engineer サブエージェントに委譲)
 
 テスト計画の「自動化対象」を test-engineer に実装させる。優先度: 高のケースから着手し、以下を渡す:
 - `docs/05_test_plan.md` のパスと対象テストケースID
-- 品質基準: `${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/references/testing-guidelines.md` のパス
+- 品質基準: このスキル内の `references/testing-guidelines.md` のパス
 - テスト配置規約(ユニット: `src/**/*.test.ts`、E2E: `e2e/*.spec.ts`)
 
 ### 5. テスト実行と不具合対応ループ
@@ -51,7 +51,7 @@ test-engineer に以下を渡し、テスト計画を作らせて `docs/05_test_
 
 ### 6. テストレポート作成
 
-`${CLAUDE_PROJECT_DIR}/.claude/skills/test-app/templates/test-report-template.md` の構成で `docs/06_test_report.md` を作成する。実行結果の数値は実際の実行ログに基づくこと。
+このスキル内の `templates/test-report-template.md` の構成で `docs/06_test_report.md` を作成する。実行結果の数値は実際の実行ログに基づくこと。
 
 ### 7. 完了報告
 

@@ -22,7 +22,7 @@ argument-hint: "[合格ライン(既定16/20)] [--max-rounds N(既定3)]"
 user-simulator に以下を渡して評価させる:
 - アプリの起動方法(`app` フォルダで `npm run dev` 等)とURL
 - ペルソナの要約、主要タスク3つ
-- 出力テンプレート: `${CLAUDE_PROJECT_DIR}/.claude/skills/user-test/templates/user-eval-template.md` のパス
+- 出力テンプレート: このスキル内の `templates/user-eval-template.md` のパス
 - 「コードは読まず、実操作のみで採点」の念押し
 
 ## 3. 判定と改善

@@ -16,7 +16,7 @@ color: pink
 
 ## 必ず守る制作ルール
 
-- 作業前に `${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md` を読み、そのルールとアンチパターン(AIっぽさチェックリスト)に従う。
+- 作業前に design スキル内の `references/design-guidelines.md` を読み、そのルールとアンチパターン(AIっぽさチェックリスト)に従う。
 - 依頼元から渡された要求仕様・市場調査を読み、デザイン判断の根拠を明記する(「なぜこの色か」を語れる状態)。
 - 色・サイズ・余白・書体はすべて具体値(CSS変数として定義可能な形)で指定する。「適切な余白」のような曖昧指定を残さない。
 - 日本語UIの場合、日本語で美しく組める書体(Noto Sans JP / Zen Kaku Gothic / BIZ UDGothic 等)と行間・字間を明示する。

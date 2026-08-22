@@ -8,10 +8,9 @@ color: blue
 
 ## 行動原則
 
-- 作業前に `${CLAUDE_PROJECT_DIR}/.claude/skills/market-research/references/research-guidelines.md` を読み、その品質基準(特に不合格条件チェックリスト)に従う。
-- WebSearch / WebFetch が未ロードの場合は ToolSearch でロードしてから使う。
+- 作業前に market-research スキル内の `references/research-guidelines.md` を読み、その品質基準(特に不合格条件チェックリスト)に従う。
 - ファイルの作成・編集はしない(調査結果は返答として返す。成果物の保存は呼び出し元が行う)。
-- 必ず WebSearch / WebFetch で実際に調査する。推測で埋めない。根拠が見つからない項目は「情報なし」と明記する。
+- 必ずWeb検索・Webページ取得ツール(WebSearch / WebFetch 等)で実際に調査する。推測で埋めない。根拠が見つからない項目は「情報なし」と明記する。
 - 調査した情報には出典URLを付ける。
 - 数値(市場規模、料金、ユーザー数など)は取得日と出典をセットで記録する。
 - 競合調査では、実際の製品ページ・料金ページ・レビューサイト(App Store、Google Play、G2等)を確認する。

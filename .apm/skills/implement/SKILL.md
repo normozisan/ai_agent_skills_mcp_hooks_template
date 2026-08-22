@@ -15,14 +15,14 @@ argument-hint: "[実装に関する追加指示(任意)]"
 ### 1. 入力の確認
 
 - `docs/02_requirements.md` を読む。**存在しない場合**: ユーザーに「先に `/requirements` を実行するか」を確認する。
-- `docs/03_ui_design.md` を読む。**存在しない場合**: 「先に `/design` を実行するか、デザイン仕様なしで進めるか」を確認する(デザイン仕様なしの場合でも `.claude/skills/design/references/design-guidelines.md` のルールには従う)。
+- `docs/03_ui_design.md` を読む。**存在しない場合**: 「先に `/design` を実行するか、デザイン仕様なしで進めるか」を確認する(デザイン仕様なしの場合でも design スキル内の `references/design-guidelines.md` のルールには従う)。
 - `docs/04_architecture.md` が既に存在する場合は読み、設計をやり直すか既存設計で続行するかを判断する(仕様が変わっていなければ続行)。
 
 ### 2. アーキテクチャ設計(architect サブエージェントに委譲)
 
-architect サブエージェントに `docs/02_requirements.md`・`docs/03_ui_design.md` のパス、CLAUDE.md の技術スタック既定値、テンプレート `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/templates/architecture-template.md` のパスを渡し、設計書を作らせて `docs/04_architecture.md` に保存する(デザイントークンのCSS変数化・フォント読み込みを設計に含めさせる)。
+architect サブエージェントに `docs/02_requirements.md`・`docs/03_ui_design.md` のパス、CLAUDE.md の技術スタック既定値、テンプレート このスキル内の `templates/architecture-template.md` のパスを渡し、設計書を作らせて `docs/04_architecture.md` に保存する(デザイントークンのCSS変数化・フォント読み込みを設計に含めさせる)。
 
-設計書のうち **技術スタックと実装タスク分割** をユーザーに提示する。技術スタックが既定値から変わる場合や複数の妥当な選択肢がある場合は AskUserQuestion で確認する(`--auto` モードでは既定値で進める)。
+設計書のうち **技術スタックと実装タスク分割** をユーザーに提示する。技術スタックが既定値から変わる場合や複数の妥当な選択肢がある場合は ユーザーに選択肢を提示して確認する(`--auto` モードでは既定値で進める)。
 
 ### 3. プロジェクトの雛形作成
 
@@ -41,7 +41,7 @@ npm create vite@latest app -- --template react-ts
 設計書の実装タスクを順に implementer サブエージェントへ委譲する。各委譲時に必ず渡すこと:
 - タスクの内容と完了条件
 - `docs/04_architecture.md`・`docs/02_requirements.md`・`docs/03_ui_design.md` のパス、関連する要件ID
-- 「UIはデザイン仕様のトークン(CSS変数)を使い、`${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md` の実装ルール(セクション10)と `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/implementation-guidelines.md` に従うこと」
+- 「UIはデザイン仕様のトークン(CSS変数)を使い、design スキル内の `references/design-guidelines.md` の実装ルール(セクション10)と このスキル内の `references/implementation-guidelines.md` に従うこと」
 - 「ビルドが通る状態で終えること」
 
 最初のタスクとして「デザイントークンのCSS変数定義とフォント読み込み」を実装させ、以降のUIタスクはすべてそのトークンを参照させる。

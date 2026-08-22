@@ -30,7 +30,7 @@ applyTo: "**"
 - **本番モード(`/pipeline` および各フェーズskill)**: 品質優先。全品質基準・完了ゲート・レビューループを省略しない。**フェーズ完了ごとに git commit する**(成果物とコードの履歴を残す。コミットメッセージは「フェーズ名: 要約」形式)。
 
 各フェーズには品質基準ドキュメントがあり、担当エージェントは必ずそれに従う:
-市場調査 `.claude/skills/market-research/references/research-guidelines.md` / 要求仕様 `.claude/skills/requirements/references/requirements-guidelines.md` / デザイン `.claude/skills/design/references/design-guidelines.md` / 実装 `.claude/skills/implement/references/implementation-guidelines.md` / テスト `.claude/skills/test-app/references/testing-guidelines.md`(いずれもプロジェクトルートからのパス)
+市場調査 market-research スキル内の `references/research-guidelines.md` / 要求仕様 requirements スキル内の `references/requirements-guidelines.md` / デザイン design スキル内の `references/design-guidelines.md` / 実装 implement スキル内の `references/implementation-guidelines.md` / テスト test-app スキル内の `references/testing-guidelines.md`(各スキルのフォルダ内。配備先は Claude Code: `.claude/skills/`、Copilot: `.agents/skills/`)
 
 ## 絶対に守るルール
 
@@ -39,32 +39,32 @@ applyTo: "**"
 2-2. **v1完成後の変更(機能追加・修正)は `/iterate` の手順で行い、コードだけ直してドキュメントを腐らせない。**
 3. **アプリのソースコードは `app/` ディレクトリ配下に作成する。** テンプレートのルートを汚さない。
 4. **成果物・コメント・ドキュメントはすべて日本語で書く。** コード内の識別子(変数名・関数名)は英語。
-5. **各フェーズ完了時に成果物のサマリーをユーザーに提示し、次フェーズへ進む前に重要な意思決定(技術スタック、MVPスコープ等)は AskUserQuestion で確認する。** `/pipeline` 実行時も同様(自動承認モードを明示された場合を除く)。
+5. **各フェーズ完了時に成果物のサマリーをユーザーに提示し、次フェーズへ進む前に重要な意思決定(技術スタック、MVPスコープ等)はユーザーに選択肢を提示して確認する。** `/pipeline` 実行時も同様(自動承認モードを明示された場合を除く)。
 
 ## 品質基準
 
 - 実装フェーズでは lint / typecheck / build がすべて通るまで完了としない。
 - テストフェーズでは、失敗したテストは原因を修正して再実行する。修正不能な場合はテストレポートに理由を明記する。
 - コードレビューは code-reviewer サブエージェントで必ず実施し、Critical/High の指摘はすべて修正してから完了とする。
-- **デザイン品質**: UIを持つアプリは、`.claude/skills/design/references/design-guidelines.md` のプロ品質基準と「AIっぽさ」アンチパターンチェックリストに全面的に従う。実装後は design-reviewer によるスクリーンショットベースのデザインレビューに合格するまで完了としない。
+- **デザイン品質**: UIを持つアプリは、design スキル内の `references/design-guidelines.md` のプロ品質基準と「AIっぽさ」アンチパターンチェックリストに全面的に従う。実装後は design-reviewer によるスクリーンショットベースのデザインレビューに合格するまで完了としない。
 
 ## 技術スタック既定値(要求仕様で特に指定がない場合)
 
 - Webアプリ / Webサイト: Vite + React + TypeScript
-- スマホアプリ: `.claude/skills/implement/references/mobile-guidelines.md` に従う。既定はレスポンシブWeb(PWA)、ネイティブ機能(ストア配布・プッシュ通知・カメラ等)がMust要件の場合のみ Expo (React Native)。プラットフォーム判定は要求仕様フェーズで行い仕様書に明記。ネイティブの場合はテスト(jest-expo/Maestro)・デザインレビュー(Expo Web経由)・リリース(EAS/ストア申請)も同ガイドラインの手順に切り替える
+- スマホアプリ: implement スキル内の `references/mobile-guidelines.md` に従う。既定はレスポンシブWeb(PWA)、ネイティブ機能(ストア配布・プッシュ通知・カメラ等)がMust要件の場合のみ Expo (React Native)。プラットフォーム判定は要求仕様フェーズで行い仕様書に明記。ネイティブの場合はテスト(jest-expo/Maestro)・デザインレビュー(Expo Web経由)・リリース(EAS/ストア申請)も同ガイドラインの手順に切り替える
 - テスト: Vitest(ユニット) + Playwright(E2E)
 - スタイル: Tailwind CSS もしくはプレーンCSS(要件に応じて)。いずれの場合もデザイントークンをCSS変数で定義し、HEX直書きをしない
 - バックエンドが必要な場合: Node.js (Express or Hono) + SQLite から開始
-- **SaaS型(認証・決済・サーバーサイドDBのいずれかを含む)の場合**: `.claude/skills/implement/references/saas-guidelines.md` の技術スタック既定値(Next.js / Supabase / Stripe)と大原則(認証を自作しない・カード情報に触れない・認可はサーバー側)に全フェーズで従う。適用判定は要求仕様フェーズで行い、仕様書に明記する
+- **SaaS型(認証・決済・サーバーサイドDBのいずれかを含む)の場合**: implement スキル内の `references/saas-guidelines.md` の技術スタック既定値(Next.js / Supabase / Stripe)と大原則(認証を自作しない・カード情報に触れない・認可はサーバー側)に全フェーズで従う。適用判定は要求仕様フェーズで行い、仕様書に明記する
 
-ライブラリの最新の使い方は Context7 MCP (`mcp__context7__*`) で確認してから書くこと。
+ライブラリの最新の使い方は Context7 MCP で確認してから書くこと。
 
 ## MCP サーバー
 
 - `playwright`: E2Eテスト実行、実装したアプリの動作確認、競合サイトの調査に使用。
 - `context7`: ライブラリの最新ドキュメント取得。実装前に主要ライブラリのAPIを確認する。
 
-MCPツールが未ロード(deferred)の環境では、使用前に ToolSearch で `mcp__playwright` / `mcp__context7` を検索してロードすること。
+MCPツールは使用前に読み込まれていることを確認する(環境によってはツール検索での読み込みが必要)。
 
 ## サブエージェントの使い分け
 
@@ -73,12 +73,13 @@ MCPツールが未ロード(deferred)の環境では、使用前に ToolSearch �
 - デザインの作成・変更は ui-designer に委譲する。
 - サブエージェントには「必要なファイルパス・前フェーズ成果物の要約・期待する出力形式」を必ずプロンプトに含めて自己完結させる。
 
-## 実行環境の差異(Claude Code以外に配備された場合の読み替え)
+## 実行環境の差異(Claude Code / GitHub Copilot 共通で動かすための約束)
 
-本規約・skills・agents はClaude Codeを基準に書かれている。APM経由でGitHub Copilot等に配備された場合は以下のとおり読み替えて実行する:
+skills・agents の記述はツール中立に書かれている(ファイル参照は「X スキル内の `references/…`」のようにスキル名+相対パス)。環境ごとの対応は以下のとおり:
 
-- **パス**: `.claude/skills/...` `.claude/agents/...` は配備先の規定ディレクトリ(Copilot: skills は `.agents/skills/`、agents は `.github/agents/`、規約は `.github/instructions/`)に読み替える。`${CLAUDE_PROJECT_DIR}` はプロジェクトルート
-- **「Skillツールで〜スキルを実行」**: Skillツールが無い環境では、該当スキルの `SKILL.md` を読み、その手順に従って自分で実行する
-- **「〜サブエージェントに委譲」**: カスタムエージェント機能(説明文による自動ルーティング、または明示呼び出し)で委譲する。並列起動ができない環境では直列に実行してよい。委譲機能自体が無い環境では、該当エージェント定義(`*.agent.md`)の行動原則を自分で読み、その役割になりきって実行する
-- **「AskUserQuestion」**: 通常のチャットでの質問で代替する
-- **「ToDoリスト」**: 利用可能なタスク管理機能で代替。無ければ進捗を文章で報告する
+- **配備先**: skills は Claude Code: `.claude/skills/` / Copilot: `.agents/skills/`。agents は Claude Code: `.claude/agents/` / Copilot: `.github/agents/`。「X スキル内の…」はその配備先の該当フォルダを指す
+- **「X スキルを実行する」**: スキル呼び出し機能があればそれで、無い環境では該当スキルの `SKILL.md` を読んで手順に従う
+- **「〜サブエージェントに委譲」**: サブエージェント/カスタムエージェント機能で委譲する。並列起動ができない環境では直列に実行してよい。委譲機能が無い環境では、該当エージェント定義を読んでその役割になりきって実行する
+- **「ユーザーに選択肢を提示して確認する」**: 選択肢UIがあればそれで、無ければチャットで質問する
+- **MCP(Playwright / Context7)**: 使用前に読み込まれていることを確認する(環境によってはツール検索での読み込みが必要)
+- **ToDo/タスク管理**: 利用可能な機能で代替。無ければ進捗を文章で報告する

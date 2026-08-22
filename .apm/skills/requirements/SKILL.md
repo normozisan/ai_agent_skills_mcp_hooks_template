@@ -16,15 +16,15 @@ argument-hint: "[--spec <仕様ファイルパスまたは仕様本文>] [追加
 
 **A. 仕様持ち込みの場合**(`--spec` 指定、または $ARGUMENTS にファイルパス・仕様本文が含まれる場合):
 - 渡された仕様を読み、それを一次入力とする。市場調査は必須としない(あれば補助入力として読む)
-- 持ち込み仕様を requirements-guidelines.md の基準で検査し、**曖昧な要件・受け入れ基準の欠落・未定義事項を列挙**する。重要な不明点は AskUserQuestion で確認し、些細な点は合理的に仮置きして「要確認事項」に記録する
+- 持ち込み仕様を requirements-guidelines.md の基準で検査し、**曖昧な要件・受け入れ基準の欠落・未定義事項を列挙**する。重要な不明点はユーザーに確認し、些細な点は合理的に仮置きして「要確認事項」に記録する
 - 持ち込み仕様の内容を勝手に削ったり変えたりしない。変更提案がある場合(スコープ過大等)は提案として提示し、ユーザーの承認を得てから反映する
 
 **B. 市場調査から作る場合**(既定):
 - `docs/01_market_research.md` を読む。**存在しない場合**: ユーザーに「先に `/market-research` を実行するか、市場調査なしで進めるか」を確認する。市場調査なしで進める場合はアイデアの詳細をヒアリングする。
 
-### 2. 重要な意思決定の確認(AskUserQuestion)
+### 2. 重要な意思決定の確認(ユーザーへの確認)
 
-仕様を書き始める前に、以下のうち市場調査から自明でないものを AskUserQuestion でユーザーに確認する(最大4問、自明なものは聞かない):
+仕様を書き始める前に、以下のうち市場調査から自明でないものを選択肢を提示してユーザーに確認する(最大4問、自明なものは聞かない):
 
 - プラットフォーム(Webアプリ / モバイル対応の程度)
 - MVPの規模感(最小検証 / ある程度作り込む)
@@ -38,12 +38,12 @@ argument-hint: "[--spec <仕様ファイルパスまたは仕様本文>] [追加
 requirements-engineer サブエージェントに以下を渡して委譲する:
 - 一次入力(A: 持ち込み仕様の内容と確認結果 / B: `docs/01_market_research.md` のパス。Bでは「申し送り」セクションを重視するよう指示)
 - ステップ2で確定した意思決定
-- 出力テンプレート: `${CLAUDE_PROJECT_DIR}/.claude/skills/requirements/templates/requirements-template.md` のパス
-- 品質基準: `${CLAUDE_PROJECT_DIR}/.claude/skills/requirements/references/requirements-guidelines.md` のパス
+- 出力テンプレート: このスキル内の `templates/requirements-template.md` のパス
+- 品質基準: このスキル内の `references/requirements-guidelines.md` のパス
 
 ### 4. 整合性チェック(自分で実施)
 
-出来上がった仕様を `${CLAUDE_PROJECT_DIR}/.claude/skills/requirements/references/requirements-guidelines.md` の不合格条件チェックリストと以下の観点で検査し、問題があれば修正する:
+出来上がった仕様を このスキル内の `references/requirements-guidelines.md` の不合格条件チェックリストと以下の観点で検査し、問題があれば修正する:
 - すべての Must 要件に受け入れ基準があるか
 - 受け入れ基準はテスト可能な書き方か(曖昧語「使いやすい」「高速」が残っていないか)
 - 市場調査の差別化ポイントが Must / Should のどこかに反映されているか

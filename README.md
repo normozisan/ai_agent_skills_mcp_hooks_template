@@ -191,10 +191,10 @@ flowchart TD
 | サブエージェント(独立コンテキスト) | ○ Agentツールで明示委譲 | ○ 本パッケージのagentsは `.agent.md` 形式で**Copilotのカスタムエージェント**として配備され、依頼内容に合うエージェントへ自動ルーティング(または `/agent` で明示呼び出し)される |
 | 並列ファンアウト(調査3体同時など) | ○ | △ 自動委譲は逐次。並列はユーザーが Copilot CLI の `/fleet` を起動 |
 | サブエージェントからの再委譲 | ○ | △ VS Codeは既定オフ(`chat.subagents.allowInvocationsFromSubagents`) |
-| スキルからスキルの呼び出し(`/pipeline` が各フェーズを呼ぶ) | ○ Skillツール | △ 専用ツール無し。規約の「読み替えルール」により該当SKILL.mdを読んで自分で実行する形で代替 |
+| スキルからスキルの呼び出し(`/pipeline` が各フェーズを呼ぶ) | ○ Skillツール | △ 専用ツール無し。該当SKILL.mdを読んで自分で実行する形で代替(スキル本文・規約に明記) |
 | `/pipeline` 一発の完全自動 | ○ 実機検証済み | △ 仕組み上は動く見込み、**未検証** |
 
-規約(`AGENTS.md` / `copilot-instructions.md` に展開される)には**環境差の読み替えルール**を入れてあります: Claude Code向けのパス・「Skillツールで実行」・「サブエージェントに委譲」といった記述を、Copilotでは `.github/` 配下のパス・SKILL.mdの手動実行・カスタムエージェントへのルーティングに読み替えて動くようにしています。agents定義もClaude固有のフィールドを持たない形式にしてあり、両ツールで同じファイルが使えます。
+skills・agentsは**ツール中立の書き方**で統一してあります(ファイル参照は「X スキル内の `references/…`」のようにスキル名+相対パス、Skillツール・AskUserQuestion等のツール固有名は不使用、Claude固有のfrontmatterも無し)。そのため両ツールで同じファイルがそのまま解釈できます。配備先の違い(Copilot: skills→`.agents/skills/`、agents→`.github/agents/`)と、スキル呼び出し機能が無い環境での動き方(該当SKILL.mdを読んで手順に従う)は規約(`.github/instructions/` に配備)に明記してあります。
 
 ### Copilotでの推奨の使い方
 

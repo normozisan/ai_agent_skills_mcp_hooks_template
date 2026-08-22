@@ -23,7 +23,7 @@ argument-hint: "[デプロイ先の希望(任意)]"
 - [ ] favicon・タイトル・OGP(公開Webの場合)が仮のままになっていない
 - [ ] 404・オフライン・初回起動(データ0件)の状態が壊れていない
 
-**SaaSガイドライン適用アプリの場合**、`${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/saas-guidelines.md` セクション8の追加チェック(本番シークレット分離、Webhook本番登録、RLS全テーブル有効、規約・特商法表記の公開、エラー監視)もすべて確認する。
+**SaaSガイドライン適用アプリの場合**、implement スキル内の `references/saas-guidelines.md` セクション8の追加チェック(本番シークレット分離、Webhook本番登録、RLS全テーブル有効、規約・特商法表記の公開、エラー監視)もすべて確認する。
 
 問題があれば修正してから次へ進む(修正は implementer に委譲可)。
 
@@ -33,12 +33,12 @@ argument-hint: "[デプロイ先の希望(任意)]"
 
 ### 3. デプロイ準備
 
-デプロイ先をユーザーに確認する(AskUserQuestion。希望が $ARGUMENTS にあればそれに従う):
+デプロイ先をユーザーに確認する(希望が $ARGUMENTS にあればそれに従う):
 
 - **静的Webアプリ(バックエンドなし)**: GitHub Pages / Netlify Drop(アカウント不要度が高い順に提案)
 - **Vercel / Netlify(CLI)**: CLIでのデプロイ手順を用意(実行はユーザー承認後)
 - **ローカル配布のみ**: ビルド成果物と起動手順の説明
-- **ネイティブ(Expo)アプリ**: `${CLAUDE_PROJECT_DIR}/.claude/skills/implement/references/mobile-guidelines.md` セクション5に従う(EAS Build → TestFlight / Play内部テスト。開発者アカウントの必要性と費用を事前案内し、ストア審査に必要なもの一式をリリースノートにまとめる。審査提出はユーザー自身の操作)
+- **ネイティブ(Expo)アプリ**: implement スキル内の `references/mobile-guidelines.md` セクション5に従う(EAS Build → TestFlight / Play内部テスト。開発者アカウントの必要性と費用を事前案内し、ストア審査に必要なもの一式をリリースノートにまとめる。審査提出はユーザー自身の操作)
 
 選ばれた方式に必要な設定ファイル(`vite.config` の base パス、リダイレクト設定等)を実装し、ビルドが通ることを確認する。
 

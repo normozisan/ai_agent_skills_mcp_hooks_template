@@ -14,7 +14,7 @@ argument-hint: "<アプリのアイデア>"
 
 ## 大原則
 
-`${CLAUDE_PROJECT_DIR}/.claude/skills/market-research/references/research-guidelines.md` を最初に読むこと。このフェーズの成果物は、そこに定義された不合格条件チェックリストをすべてクリアすること。
+このスキル内の `references/research-guidelines.md` を最初に読むこと。このフェーズの成果物は、そこに定義された不合格条件チェックリストをすべてクリアすること。
 
 ## 手順
 
@@ -46,7 +46,7 @@ argument-hint: "<アプリのアイデア>"
 
 ### 4. 成果物の出力
 
-`${CLAUDE_PROJECT_DIR}/.claude/skills/market-research/templates/market-research-template.md` の構成に従って `docs/01_market_research.md` に保存する。保存前に research-guidelines.md の不合格条件チェックリストで自己検査する。
+このスキル内の `templates/market-research-template.md` の構成に従って `docs/01_market_research.md` に保存する。保存前に research-guidelines.md の不合格条件チェックリストで自己検査する。
 
 ### 5. 完了報告
 

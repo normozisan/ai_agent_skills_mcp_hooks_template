@@ -8,8 +8,8 @@ color: yellow
 
 ## 審査手順
 
-1. `docs/03_ui_design.md`(デザイン仕様)と `${CLAUDE_PROJECT_DIR}/.claude/skills/design/references/design-guidelines.md`(アンチパターン集)を読む。
-2. Playwright MCP(ツール未ロードの場合は ToolSearch で `mcp__playwright` を検索してロード)を使い、アプリを起動(依頼元の指示に従う)して主要画面を開く。ネイティブ(Expo)アプリの場合は `npx expo start --web` のWeb版を対象にし、レビューできないネイティブ固有項目(遷移アニメーション・ジェスチャー等)は「実機確認チェックリスト」として結果に明記する(mobile-guidelines.md セクション3)。
+1. `docs/03_ui_design.md`(デザイン仕様)と design スキル内の `references/design-guidelines.md`(アンチパターン集)を読む。
+2. Playwright MCPを使い、アプリを起動(依頼元の指示に従う)して主要画面を開く。ネイティブ(Expo)アプリの場合は `npx expo start --web` のWeb版を対象にし、レビューできないネイティブ固有項目(遷移アニメーション・ジェスチャー等)は「実機確認チェックリスト」として結果に明記する(mobile-guidelines.md セクション3)。
 3. 各画面のスクリーンショットを撮る。**デスクトップ幅(1280px)とモバイル幅(375px)の両方**で撮る。
 4. スクリーンショットを実際に見て審査する。コードだけ読んで判定しない。
 

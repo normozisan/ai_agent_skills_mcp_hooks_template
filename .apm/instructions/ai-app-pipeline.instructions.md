@@ -77,7 +77,7 @@ MCPツールが未ロード(deferred)の環境では、使用前に ToolSearch �
 
 本規約・skills・agents はClaude Codeを基準に書かれている。APM経由でGitHub Copilot等に配備された場合は以下のとおり読み替えて実行する:
 
-- **パス**: `.claude/skills/...` `.claude/agents/...` は配備先の規定ディレクトリ(Copilot: `.github/skills/` `.github/agents/`)に読み替える。`${CLAUDE_PROJECT_DIR}` はプロジェクトルート
+- **パス**: `.claude/skills/...` `.claude/agents/...` は配備先の規定ディレクトリ(Copilot: skills は `.agents/skills/`、agents は `.github/agents/`、規約は `.github/instructions/`)に読み替える。`${CLAUDE_PROJECT_DIR}` はプロジェクトルート
 - **「Skillツールで〜スキルを実行」**: Skillツールが無い環境では、該当スキルの `SKILL.md` を読み、その手順に従って自分で実行する
 - **「〜サブエージェントに委譲」**: カスタムエージェント機能(説明文による自動ルーティング、または明示呼び出し)で委譲する。並列起動ができない環境では直列に実行してよい。委譲機能自体が無い環境では、該当エージェント定義(`*.agent.md`)の行動原則を自分で読み、その役割になりきって実行する
 - **「AskUserQuestion」**: 通常のチャットでの質問で代替する

@@ -35,20 +35,20 @@
 
 ### インストール手順(使うツールの列を上から実行するだけ)
 
-ツールによる違いは **`--target` の値** と **Claude Codeだけ手順3がある** の2点だけです。開発プロジェクトのフォルダで実行してください。
+ツールによる違いは **`--target` の値** と **Claude Codeだけ手順2・3がある** の2点だけです。Copilotは実質コマンド1つで完了します。開発プロジェクトのフォルダで実行してください。
 
 | 手順 | GitHub Copilot (VS Code) | Claude Code |
 |---|---|---|
 | 1. パッケージ導入 | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target copilot` | `apm install normozisan/ai_agent_skills_mcp_hooks_template --target claude` |
-| 2. 規約ファイル生成 | `apm compile -t copilot` | `apm compile` |
+| 2. 規約ファイル生成 | (不要 — 手順1で `.github/instructions/` に配備済み) | `apm compile` |
 | 3. 権限設定コピー | (不要) | `robocopy apm_modules\normozisan\ai_agent_skills_mcp_hooks_template\template . /E` |
-| 4. 開始 | VS CodeでCopilotを開く | `claude` を起動 |
+| 4. 開始 | VS CodeでCopilot Chatを**エージェントモード**で開く | `claude` を起動 |
 
 <details>
 <summary>各手順が何をしているか(クリックで展開)</summary>
 
-- **手順1**: skills・agents・hooks・MCPが各ツールの規定場所(Copilot: `.github/` 等 / Claude: `.claude/`)に自動配備されます。同時に `apm.yml` / `apm.lock.yaml` が生成されます
-- **手順2**: 開発規約を規定ファイル(Copilot: `.github/copilot-instructions.md` / Claude: `AGENTS.md`)に生成します
+- **手順1**: skills・agents・hooks・MCPが各ツールの規定場所に自動配備されます(Copilot: agents→`.github/agents/`、skills→`.agents/skills/`、規約→`.github/instructions/` / Claude: `.claude/` 配下)。同時に `apm.yml` / `apm.lock.yaml` が生成されます。※ Windows日本語環境では先に `$env:PYTHONUTF8=1` を実行すると文字コード警告を防げます
+- **手順2(Claude Codeのみ)**: 開発規約を `AGENTS.md` に生成します。Copilotでは手順1で `.github/instructions/ai-app-pipeline.instructions.md` として配備済みのため不要です(`apm compile -t copilot` を実行すると「出力なし」の警告が出ますが、異常ではありません)
 - **手順3(Claude Codeのみ)**: `apm install` 時に `apm_modules/` へダウンロード済みのプロジェクト雛形をコピーします。目的はほぼ1つ、**権限の事前許可設定(`.claude/settings.json`)を置くこと**。これが無くても動きますが、npmやgitの実行ごとに許可確認が出て自動実行が止まりがちになります。一緒にコピーされる `docs/`・`app/` は出力先の説明用で、無くても自動生成されます。Mac/Linuxでは `cp -r apm_modules/normozisan/ai_agent_skills_mcp_hooks_template/template/. .`
 - 新規の空フォルダでは `--target` 指定が必須です(既存プロジェクトでは自動検出されます)
 
@@ -229,6 +229,9 @@ APM(Python製)が日本語のファイルをWindows既定の文字コードで�
 
 **Q. `/refine` などを打っても `Unknown command` と出る**
 スラッシュコマンドは**プロジェクト直下の `.claude/skills/`** から登録されます。このリポジトリを親フォルダから開いている場合や、`apm install` を別フォルダで実行した場合は認識されません。使うプロジェクトのフォルダでClaude Codeを起動し直してください(`claude` 起動後の `/` 一覧に `refine` が出れば正常)。
+
+**Q. Copilotでセッション開始時の進捗通知(hook)が動かない**
+現時点のAPMは本パッケージの `SessionStart` フックをCopilotのイベント名に対応付けできず、インストール時に警告が出ます(skills・agents・規約の配備には影響なし)。Copilotでは進捗把握に `docs/` フォルダを直接確認してください。
 
 **Q. Claude Code で権限確認が頻発する**
 クイックスタート手順3(`template/` のコピー)を実行したか確認してください。`.claude/settings.json` が権限を事前許可します。

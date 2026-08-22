@@ -224,6 +224,12 @@ Copilot側は「配備される形式と委譲の仕組みが仕様上噛み合�
 **Q. MCPサーバーの登録が進まない / 失敗する**
 Node.js がインストールされているか確認してください(MCPは npx 経由で起動)。MCP登録に失敗しても skills/agents/hooks は配備済みです。Claude Code なら `template/.mcp.json` をプロジェクト直下にコピーすれば MCP を利用できます。
 
+**Q. `apm install` 中に `UnicodeDecodeError: 'cp932' codec can't decode...` が出る(Windows・日本語環境)**
+APM(Python製)が日本語のファイルをWindows既定の文字コードで読もうとして出る警告です。配備自体は完了していることが多いですが、環境変数 `PYTHONUTF8=1` を設定すると解消します(PowerShell: `$env:PYTHONUTF8=1` を実行してから `apm install`。恒久的にはシステム環境変数に追加)。
+
+**Q. `/refine` などを打っても `Unknown command` と出る**
+スラッシュコマンドは**プロジェクト直下の `.claude/skills/`** から登録されます。このリポジトリを親フォルダから開いている場合や、`apm install` を別フォルダで実行した場合は認識されません。使うプロジェクトのフォルダでClaude Codeを起動し直してください(`claude` 起動後の `/` 一覧に `refine` が出れば正常)。
+
 **Q. Claude Code で権限確認が頻発する**
 クイックスタート手順3(`template/` のコピー)を実行したか確認してください。`.claude/settings.json` が権限を事前許可します。
 
